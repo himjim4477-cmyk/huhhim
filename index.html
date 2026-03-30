@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Huhhim</title>
+
+<style>
+body {
+  margin: 0;
+  background: #111;
+  color: #fff;
+  font-family: Arial;
+}
+
+/* header */
+header {
+  display: flex;
+  align-items: center;
+  background: #000;
+  padding: 15px;
+}
+
+.menu-btn {
+  font-size: 25px;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+/* sidebar */
+.sidebar {
+  position: fixed;
+  left: -250px;
+  top: 0;
+  width: 250px;
+  height: 100%;
+  background: #000;
+  transition: 0.3s;
+  padding-top: 20px;
+}
+
+.sidebar a {
+  display: block;
+  padding: 15px;
+  color: white;
+  text-decoration: none;
+}
+
+/* page */
+.page { display: none; }
+.active { display: block; }
+
+/* 🔥 ป้าย 1920x480 */
+.banner img {
+  width: 100%;
+  height: 1920 / 480 px;
+  object-fit: cover;
+}
+
+/* หมวด */
+.section {
+  padding: 10px;
+}
+
+.section h3 {
+  margin-left: 15px;
+}
+
+/* 🔥 แถวเลื่อน */
+.album-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px 15px;
+
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.album-row::-webkit-scrollbar { display: none; }
+
+/* 🔥 อัลบั้ม 340x440 */
+.album-card {
+  width: 340px;
+  height: 440px;
+  flex-shrink: 0;
+  background: #222;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.album-card img {
+  width: 100%;
+  height: 80%;
+  object-fit: cover;
+}
+
+.album-card p {
+  height: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* gallery */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+  gap: 10px;
+  padding: 15px;
+}
+
+.gallery img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+/* modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal img {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.btn {
+  position: absolute;
+  top: 50%;
+  font-size: 40px;
+  cursor: pointer;
+}
+
+.prev { left: 20px; }
+.next { right: 20px; }
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 40px;
+}
+
+</style>
+<style>
+  /* 🔥 แถบแนวนอน */
+.app-bar {
+  display: flex;
+  gap: 10px;
+  padding: 10px 15px;
+  overflow-x: auto;
+}
+
+/* ซ่อน scrollbar */
+.app-bar::-webkit-scrollbar {
+  display: none;
+}
+
+/* 🔥 กล่องเล็กยาว */
+.app-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #222;
+  padding: 8px 15px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: white;
+  flex-shrink: 0;
+  transition: 0.3s;
+}
+
+.app-item:hover {
+  background: #333;
+}
+
+/* ไอคอน */
+.app-item img {
+  width: 20px;
+  height: 20px;
+}
+
+/* ชื่อ */
+.app-item span {
+  font-size: 14px;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+  <span class="menu-btn" onclick="toggleMenu()">☰</span>
+  <span id="title">หน้าหลัก</span>
+</header>
+
+<div class="sidebar" id="sidebar">
+  <a onclick="goPage('home')">หน้าหลัก</a>
+  <div id="shortcuts"></div>
+</div>
+
+<!-- HOME -->
+<div id="home" class="page active">
+
+  <div class="banner">
+    <img src="https://i.postimg.cc/TYV6NrbY/resized-1920x480.png">
+  </div>
+ <!-- 🔥 แถบลิงก์แนวนอน -->
+
+<div class="app-bar">
+
+  <a href="https://discord.gg/uCCN5NEZ" target="_blank" class="app-item">
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png">
+    <span>Discord</span>
+  </a>
+
+  <a href="https://www.tiktok.com/@huh.him67?is_from_webapp=1&sender_device=pc" target="_blank" class="app-item">
+    <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
+    <span>TikTok</span>
+  </a>
+
+  <a href="https://www.khuiai.com/profile/himjim4477" target="_blank" class="app-item">
+    <img src="data:image/jpeg;base64,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">
+    <span>khui ai</span>
+  </a>
+
+</div>
+
+
+  <!-- บอทชาย -->
+  <div class="section">
+    <h3>บอทชาย</h3>
+    <div class="album-row">
+
+      <div class="album-card" onclick="openAlbum('album1','ติณณ์')">
+        <img src="https://i.postimg.cc/KvNWgQLQ/1149e301-cbec-4fdd-8e79-c1f7d69f024d.png">
+        <p>ติณณ์</p>
+      </div>
+
+      <div class="album-card" onclick="openAlbum('album2','วัฒน์')">
+        <img src="https://i.postimg.cc/ZRMg0qdm/Gemini-Generated-Image-bwfzcjbwfzcjbwfz.png">
+        <p>วัฒน์</p>
+      </div>
+
+      <div class="album-card" onclick="openAlbum('album3','ไฟ')">
+        <img src="https://i.postimg.cc/zXGxSyLb/1c2eb0be-e0ee-4846-a59f-ca0b227a2fbf.png">
+        <p>ไฟ</p>
+      </div>
+
+      <div class="album-card" onclick="openAlbum('album4','ว่าง')">
+        <img src="https://via.placeholder.com/300x200">
+        <p>อัลบั้มว่าง</p>
+      </div>
+
+
+    </div>
+  </div>
+
+  <!-- บอทหญิง -->
+  <div class="section">
+    <h3>บอทหญิง</h3>
+    <div class="album-row">
+
+      <div class="album-card" onclick="openAlbum('empty1','คุณหนูเรนะ')">
+        <img src="https://i.postimg.cc/1XrVkSJZ/4136027a-5cf1-459b-a35c-af1184ed5726.png">
+        <p>คุณหนูเรนะ</p>
+      </div>
+
+      <div class="album-card" onclick="openAlbum('empty2','คุณหนูไซอนจิ')">
+        <img src="https://i.postimg.cc/9M3pVWt4/db1ab3b1-590a-4f70-9951-b622bb7b7c3c.png/300x200">
+        <p>คุณหนูไซอนจิ</p>
+      </div>
+
+ <div class="album-card" onclick="openAlbum('empty2','ว่าง')">
+        <img src="https://via.placeholder.com/300x200">
+        <p>อัลบั้มว่าง</p>
+      </div>
+
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ALBUM 1 -->
+<div id="album1" class="page">
+  <div class="gallery" id="gallery1"></div>
+</div>
+
+<div id="album2" class="page">
+  <div class="gallery" id="gallery2"></div>
+</div>
+
+<div id="album3" class="page">
+  <div class="gallery" id="gallery3"></div>
+</div>
+
+<div id="album4" class="page"><h2 style="padding:20px;">ไม่มีรูป</h2></div>
+
+<!-- EMPTY -->
+<div id="empty1" class="page">
+  <div class="gallery" id="galleryEmpty1"></div>
+</div>
+
+<div id="empty2" class="page">
+  <div class="gallery" id="galleryEmpty2"></div>
+</div>
+
+<div id="empty3" class="page"><h2 style="padding:20px;">ไม่มีรูป</h2></div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <span class="close" onclick="closeModal()">×</span>
+  <span class="btn prev" onclick="change(-1)">❮</span>
+  <img id="modalImg">
+  <span class="btn next" onclick="change(1)">❯</span>
+</div>
+
+<script>
+// 🔥 รูปอัลบั้ม
+const images1 = [
+  "https://i.postimg.cc/133j06rQ/06186fdf-7330-4637-bdff-8709f349805b.png",
+  "https://i.postimg.cc/BQsy6R86/0673f341-f28d-4b4f-a744-c0052d5e3117.png",
+  "https://i.postimg.cc/mgL0dKR8/07a80d06-7097-46e5-acc0-7443754eb49d.png",
+  "https://i.postimg.cc/xT2rmcZk/0c0fe8b6-bfaf-4264-8ba2-cc4018226d71.png",
+  "https://i.postimg.cc/tCtKN90s/0ec95a4e-4359-48c6-9949-54b32f1b27d8.png",
+  "https://i.postimg.cc/KvNWgQLQ/1149e301-cbec-4fdd-8e79-c1f7d69f024d.png",
+  "https://i.postimg.cc/bwm44Lwx/18fce544-9aa2-43e5-824c-961a7f106b33.png",
+  "https://i.postimg.cc/BQcrBJWc/3eced82d-f7f8-420e-9f8c-47371aecbaaa.png",
+  "https://i.postimg.cc/L88bkf3F/4464099d-cd59-489b-8c46-2ac38328a3fa.png",
+  "https://i.postimg.cc/15ckryxn/4f5db999-48ce-4d2f-8fbc-b3b97043bc2e.png",
+  "https://i.postimg.cc/SKjH48n6/52a2cfda-dadd-4d79-acf2-6a097ff8bc00-(1).png",
+  "https://i.postimg.cc/cLLb7YBs/5832a24f-84a5-41c6-9787-74fb7c24c604.png",
+  "https://i.postimg.cc/d0DgFd7K/62aee00f-2a56-43d2-88c1-fd73e661e9e4-(1).png",
+  "https://i.postimg.cc/VsXpzzNy/671b7282-0309-494a-af2b-73f4ccb1293b.png",
+  "https://i.postimg.cc/ydZ5gHX3/73c708a5-8466-4b07-add6-f6be483482a6.png",
+  "https://i.postimg.cc/B6KyL0cL/74d484dc-9f8d-422f-8b5a-a27c998913e9.png",
+  "https://i.postimg.cc/PxwcpjzM/74d5337e-2557-4f10-83d3-44cb0121eb78.png",
+  "https://i.postimg.cc/Bbfz2VMM/83bd1670-2527-4385-a30e-0cbdd916a8f7.png",
+  "https://i.postimg.cc/kX9Z4LV2/868e10d2-c8d9-4847-a93d-c8987119e1e3.png",
+  "https://i.postimg.cc/BnSdhR4b/8fdee6fa-460a-478d-85f7-a228abe92ca9.png",
+  "https://i.postimg.cc/FF08hhKR/94fd5a1c-f803-4736-b9aa-7c6ee42f179d.png",
+  "https://i.postimg.cc/m2RqDKc7/959bffff-a862-427f-a9d9-86ed666a18f4.png",
+  "https://i.postimg.cc/y8prLdLd/ab143794-97d3-4bd6-aa36-421c4e09b853.png",
+  "https://i.postimg.cc/137Yvtv7/ac2e0fe7-33d8-4652-a712-5d0f1c141eed.png",
+  "https://i.postimg.cc/sgH0TXT7/b3b3f924-e0c3-4a9b-9789-eb707dbf044f.png",
+  "https://i.postimg.cc/cJKk2Szz/b470d7ef-be9a-4b94-805f-43fe68c5cbb3.png",
+  "https://i.postimg.cc/g0wtQW5m/bf3a9423-0bab-4bff-bb20-14ddedc7b6b1.png",
+  "https://i.postimg.cc/4dVL41sQ/c11c7851-db1b-4567-b636-870be12dfeb5.png",
+  "https://i.postimg.cc/mr0pGnfC/c7eb18e2-2dc4-43f0-bee1-559c0ccad24e.png",
+  "https://i.postimg.cc/yxKfDS8p/cf1ef452-9977-40d9-ad58-c6f4e004fd71.png",
+  "https://i.postimg.cc/jq6gGv8w/d1917ac8-cc2c-4f64-801a-e262852c09ab.png",
+  "https://i.postimg.cc/0yjVKv9N/dd2015b0-3183-453a-83d9-31b16913e145.png",
+  "https://i.postimg.cc/28cwDtnC/e7897cc8-444e-4c81-8a5d-4948a7da2a2e.png",
+  "https://i.postimg.cc/RCTdPhF6/e8de6b44-3cb4-45a1-b604-4f6c54d4f2ee.png",
+  "https://i.postimg.cc/BnRB81hC/eb021daa-0001-4685-b076-d69214e046cf.png",
+  "https://i.postimg.cc/zG4FLRtY/Screenshot-2026-03-23-00-16-25-805.png",
+  "https://i.postimg.cc/W3vm8ccD/TA-2026-03-21-20-19-23-(artist-ma-3617698429.png",
+  "https://i.postimg.cc/tJR30dT4/TA-2026-03-21-20-21-24-(artist-ma-1556402772.png",
+];
+
+let current = 0;
+let currentImages = [];
+
+// สร้าง gallery
+const gallery1 = document.getElementById("gallery1");
+images1.forEach((src,i)=>{
+  const img=document.createElement("img");
+  img.src=src;
+  img.onclick=()=>openModal(i,images1);
+  gallery1.appendChild(img);
+});
+
+const images2 = [
+ "https://i.postimg.cc/kDrk8Fqx/05a5f712-485b-4a70-bd34-85fbb6935930.png",
+ "https://i.postimg.cc/VNV1vtrM/07959e3b-4e68-48bf-8ef6-9151c749c63d.png",
+ "https://i.postimg.cc/tJ0jtHzr/08985c95-fab8-45d0-bbf4-87ffc3f33b27.png",
+ "https://i.postimg.cc/HjGf54dM/0c6f8292-222d-4120-8856-c373ccada188.png",
+ "https://i.postimg.cc/brS7sFcQ/0e72a17b-235f-4760-ba47-702e6ea32f3d.png",
+ "https://i.postimg.cc/pdXXpx0H/11fd0251-a95d-4dca-bf35-f2ee489b62b3.png",
+ "https://i.postimg.cc/mrXZ9qqQ/17a1e8cd-c8ca-4f90-aba3-998770fdda7c.png",
+ "https://i.postimg.cc/14xL6csG/1b40b4f9-6ebb-4317-8f41-2e49c5c6e7c7.png",
+ "https://i.postimg.cc/SsHyT9mS/22be7a13-4b05-4a11-ace0-515d2a303e89.png",
+ "https://i.postimg.cc/T2mG2pR9/42972a62-f121-4565-984a-704fe04606e9.png",
+ "https://i.postimg.cc/JzRR2MCQ/5201fd42-184b-400b-9b86-5a1e7ab3b170.png",
+ "https://i.postimg.cc/mDKbX9T7/558c45b7-0fac-4829-9cc1-2696fa2edc9d.png",
+ "https://i.postimg.cc/dQ732sJd/5c251a71-0871-48cd-85e2-37859f5f424a.png",
+ "https://i.postimg.cc/htnGRVTf/5e92cfe8-d928-4dc4-af6e-a593dab2013d.png",
+ "https://i.postimg.cc/4xwXCqJx/6341dcb3-49b2-4ade-b5c6-15bae4cff16f.png",
+ "https://i.postimg.cc/ZYyY9wLN/655fbdc8-4fdc-4108-a47b-532cac8ba797.png",
+ "https://i.postimg.cc/7Y8HSSBB/733b0b5a-d2f2-41d5-89d9-185050b69adb.png",
+ "https://i.postimg.cc/qvGvJgxj/7e9a41c0-6379-4633-a1a7-e5030b0c2ee3.png",
+ "https://i.postimg.cc/NM2tH0Ry/8225a4c8-c26e-411c-b1c1-2f835543a69f.png",
+ "https://i.postimg.cc/nc4H2Mgn/926c4984-e332-44dc-8ad6-9c3855e3e6e0.png",
+ "https://i.postimg.cc/yYyH9t3d/96613e07-d4af-42f0-8573-53bf02044e1b.png",
+ "https://i.postimg.cc/XYgYjXkk/9e1d0b04-4a92-4630-9fc1-cc2c6fdf31fa.png",
+ "https://i.postimg.cc/6p6NhcCc/a5a9cbc4-ef54-414e-9a05-d8c786ed2417.png",
+ "https://i.postimg.cc/sgnCHWc2/a7f2af8b-5ae8-44df-94c6-e5180a54a770.png",
+ "https://i.postimg.cc/BvX9rvYL/a84fe8b6-0dd4-4475-8025-de4f488ce1e9.png",
+ "https://i.postimg.cc/zf6Z816s/bb02e5ec-9689-496a-8616-b137c2c63ce9.png",
+ "https://i.postimg.cc/ydRqNbzS/bd451fbf-eb50-4d61-bfb2-cb2b5d85c41a.png",
+ "https://i.postimg.cc/Hn0fw8xZ/c04442ee-6007-4c23-b1b9-86b12ded51fa.png",
+ "https://i.postimg.cc/RCc55yRG/d80ded7f-3dba-4608-92a5-30a9fca90f54.png",
+ "https://i.postimg.cc/Ghd0cKg3/dd6c4bb9-722c-456c-bf2b-ed792b689067.png",
+ "https://i.postimg.cc/5N3hjzDH/e5bd3880-3a28-4e98-b1a8-3f55a5f68c56.png",
+ "https://i.postimg.cc/wBtZWGMW/e628287e-b6b5-4f63-b167-c72729a19cdc.png",
+ "https://i.postimg.cc/x11WmC2r/e7d012a2-2135-4a67-a4ba-f31b51e355d6.png",
+ "https://i.postimg.cc/fb3pHryC/eb0d5608-20d7-48e2-ac2b-fa59f5d0ef6e.png",
+ "https://i.postimg.cc/3Rm6h0g2/f037d136-2123-41f2-9676-ff000a191a9c.png",
+ "https://i.postimg.cc/fb6F1f0n/f0f424f7-7988-41f8-a19f-7350c5b3fcdc.png",
+ "https://i.postimg.cc/yxKG86jq/fc9ef2ec-5646-48bd-90a8-82a751034aab.png",
+ "https://i.postimg.cc/tJzMZ0vs/TA-2026-03-23-09-46-22-1boy-solo-3680591437.png",
+ "https://i.postimg.cc/m2bqxDhW/TA-2026-03-23-09-52-15-1boy-solo-4253158207-0.png",
+ "https://i.postimg.cc/fTwF4LkM/unnamed.jpg"
+];
+
+const gallery2 = document.getElementById("gallery2");
+
+images2.forEach((src,i)=>{
+  const img=document.createElement("img");
+  img.src=src;
+  img.onclick=()=>openModal(i, images2);
+  gallery2.appendChild(img);
+});
+
+const images3 = [
+  "https://i.postimg.cc/zXGxSyLb/1c2eb0be-e0ee-4846-a59f-ca0b227a2fbf.png",
+  "https://i.postimg.cc/sDgT9MBG/1dbb4254-de59-475b-bc61-3d442ce71d4a.png",
+  "https://i.postimg.cc/v8zPVrmg/1e5ed6a3-1b2d-4b75-a72d-c854fdc4d542.png",
+  "https://i.postimg.cc/3NSCbZy6/205bf210-844d-4062-a07b-628e78aea30b.png",
+  "https://i.postimg.cc/cJy7jCHd/2501e368-1d85-43ae-8cbd-4038e0a63aba.png",
+  "https://i.postimg.cc/zfK7XWMm/25ff6577-90b6-4aa8-afc1-f4c2cf7ef5ce.png",
+  "https://i.postimg.cc/xdvGSQJ8/2974f85d-30c7-4745-b9b1-d9d177be274c.png",
+  "https://i.postimg.cc/v8zPVrmY/2ebf80e0-c25a-4d81-9913-94fad60265a0.png",
+  "https://i.postimg.cc/vHZ0L41t/2f0bd66f-65c9-4f10-8b25-85637f8da7ba.png",
+  "https://i.postimg.cc/9Qv1h1x5/33f11fe8-b730-4b84-bc25-4431b3c6f7dd.png",
+  "https://i.postimg.cc/xT16yXk7/3b29401f-39be-492b-99aa-6cea6da2daf5.png",
+  "https://i.postimg.cc/NfCpNQmv/3bf92050-4dcd-4773-94c2-2292348b91bb.png",
+  "https://i.postimg.cc/nhsTgNGF/3ebe797f-13cf-4d0a-96f9-baffeb81bd4b.png",
+  "https://i.postimg.cc/MZdDTzs7/409bc407-3700-41e5-b0e7-a60c98e349f0.png",
+  "https://i.postimg.cc/jjPcdN9L/45fb8a9b-4f39-4529-afef-224041bf9b1f.png",
+  "https://i.postimg.cc/NfFx2ZVW/500c44c9-55ee-4d5d-80c1-95d974b76856.png",
+  "https://i.postimg.cc/Twx9y1Mh/54d71400-3056-4605-8225-d5f6c9d36b03.png",
+  "https://i.postimg.cc/CL2sGmpF/653ed944-9cee-44bf-b010-cb7ec7fe9226.png",
+  "https://i.postimg.cc/sgZ9w731/669c5971-8f85-48bd-b8dd-984cd3e32498.png",
+  "https://i.postimg.cc/Twccnxfn/70b70db7-6659-4379-a49f-54ef5b90d0ca.png",
+  "https://i.postimg.cc/gJKK3pGY/71a3f490-f983-45a3-b281-f953209fde7d.png",
+  "https://i.postimg.cc/D0yPgNwH/71c9caed-ae41-4947-9707-0b98adead728.png",
+  "https://i.postimg.cc/FHJgD3hx/748a2bfe-a07a-486a-91da-1c73d3b79ef7.png",
+  "https://i.postimg.cc/d3tjBf0h/76fc4110-b52f-456e-9de0-e9253507e0a1.png",
+  "https://i.postimg.cc/wMTQVrBt/77a05482-d890-4f4b-98b2-754f0af2e769.png",
+  "https://i.postimg.cc/fy2jgv3X/87cdcaba-6b2b-49a0-b0d9-f5b6b46d4bf3.png",
+  "https://i.postimg.cc/1zh0TXzc/897da77f-f897-4ff5-a337-5eec52e18d13.png",
+  "https://i.postimg.cc/VkS4p2WB/8c3d5222-ff03-4756-9843-abb79fc3b4ce.png",
+  "https://i.postimg.cc/9M1GrBYp/afa6486c-e2da-48ea-b29c-75b437d8cfb2.png",
+  "https://i.postimg.cc/3NR2pDLH/b008bc0e-8b6f-4480-8c5a-a4eb98d766ec.png",
+  "https://i.postimg.cc/XqJ9Fy2f/bb145f4a-834a-4e98-9fe8-383166c7bb27.png",
+  "https://i.postimg.cc/ZnMpLKgj/bbad2c12-4bae-407f-a20c-7cb9ad01066b.png",
+  "https://i.postimg.cc/MZP7wdTM/bdbb4842-0d6f-432a-8506-b2389c767fdf.png",
+  "https://i.postimg.cc/BQjxnHLB/c3c4bdd4-366f-4db3-9f88-dc6815dcc7e3.png",
+  "https://i.postimg.cc/CLRjxkng/c46efdf3-9b71-4055-ae71-c96521bdcbf0.png",
+  "https://i.postimg.cc/pX3KhrKr/c7910ad0-e314-4e04-8f95-93e8570aa2d7.png",
+  "https://i.postimg.cc/0ymDpvCp/d4a30242-cd44-4d6d-9cea-b3279c2fe4cb.png",
+  "https://i.postimg.cc/P5ZYmHMF/d5fbe05e-e898-496d-9a94-5326d4f33b07.png",
+  "https://i.postimg.cc/PqjZy76R/d7a3b378-6504-47bc-b80b-420b550e4731.png",
+  "https://i.postimg.cc/HL9MhtRL/da1d39fb-8293-4f08-91b1-8d1ead134126.png",
+  "https://i.postimg.cc/d1QCPycy/dfce0581-492c-4163-9a68-f517c00e5f2e.png",
+  "https://i.postimg.cc/85kvQ6Vg/ebb7eeca-5aa7-4858-acce-a7d0abb63efe.png",
+  "https://i.postimg.cc/XJ2CVYVB/f4c69ab4-abed-4d49-b2e8-00ec837dd515.png",
+  "https://i.postimg.cc/4yqH9276/f65300e2-3a44-45d6-ad36-b4cbb54f6cc8.png",
+  "https://i.postimg.cc/GtHs9n2P/f93bacdf-17fc-40a1-91df-5fecf1003310.png",
+  "https://i.postimg.cc/DfMXH0jG/fc0f6749-f386-4259-90c4-1f664be3b1be.png",
+  "https://i.postimg.cc/15VqQS27/fdea79cb-9804-4f64-b761-2e5b183594d4.png"
+];
+
+const gallery3 = document.getElementById("gallery3");
+
+images3.forEach((src,i)=>{
+  const img=document.createElement("img");
+  img.src=src;
+  img.onclick=()=>openModal(i, images3);
+  gallery3.appendChild(img);
+});
+
+const imagesEmpty1 = [
+  "https://i.postimg.cc/T1LgWn3j/031befa5-4502-4631-ae40-29624c02c0fb.png",
+  "https://i.postimg.cc/cCnXwvxw/061c0557-f9b1-4236-9b5a-3ed38927939a.png",
+  "https://i.postimg.cc/DzkjfyBk/08a3a9a7-6110-4fc1-b3e9-83f27da3fee5.png",
+  "https://i.postimg.cc/L6v2Zwrm/0a5c849e-1366-4e7e-8c88-b8a9690c8a52.png",
+  "https://i.postimg.cc/VLzzvmZb/0dffe701-7a70-4fe5-b74a-1c13262704d7.png",
+  "https://i.postimg.cc/jS5K6vrm/1c319c1b-162e-4389-ba42-834828e93fc2.png",
+  "https://i.postimg.cc/Y0MBvz3Z/1e153006-3ee5-4669-a80f-c56a1dd273a5.png",
+  "https://i.postimg.cc/pVJtg3Vt/2b73645a-1332-4a65-9917-11954d2d9ac4.png",
+  "https://i.postimg.cc/CMsVW9h9/2c95cc25-88ac-4a50-a816-f93df13bfa47.png",
+  "https://i.postimg.cc/L8MLnYKC/32b15f38-4c4c-45cb-b738-b1ee392f439a.png",
+  "https://i.postimg.cc/NGS1vCNQ/32d91f46-033d-4fe9-a1cc-1e8a8db9d5b1.png",
+  "https://i.postimg.cc/1zX0D8M6/3335a07e-38d6-4b89-bcad-a879347af957.png",
+  "https://i.postimg.cc/4nR77MM7/33ae1ef3-f47b-4c63-ad1e-ba91c743989c.png",
+  "https://i.postimg.cc/TP5LRgCV/35904736-7d9a-43a7-a6b5-b5dd7525e155.png",
+  "https://i.postimg.cc/nz53X4Jj/39acbd65-b7d0-487e-ac95-cb4ccf4fde60.png",
+  "https://i.postimg.cc/1XrVkSJZ/4136027a-5cf1-459b-a35c-af1184ed5726.png",
+  "https://i.postimg.cc/59SMZD94/4c690baa-6aa4-450b-a007-9bbbf1b59bc1.png",
+  "https://i.postimg.cc/xTpBQ2wf/4f490b19-942c-4415-9f86-133b540050cf.png",
+  "https://i.postimg.cc/5yCnLX4s/54db00ce-8799-4ddc-9d96-0189c3a19dfd.png",
+  "https://i.postimg.cc/3RyBQkvM/558a6071-8a10-4436-9a48-42701edea981.png",
+  "https://i.postimg.cc/5yLSjDgg/562c716b-6168-4b63-9d6a-581551663d4a.png",
+  "https://i.postimg.cc/C5Tjym0D/56373ad5-74d3-4d6f-8fa1-bde46eeae2cb.png",
+  "https://i.postimg.cc/s2xP5MKv/691b9f5e-08f7-4327-8b41-09dd178fc8c6.png",
+  "https://i.postimg.cc/520QRZz7/7567747d-57c9-49c2-81b2-1fb3c1b323e6.png",
+  "https://i.postimg.cc/RZsKCMmy/780634a5-abac-4320-8f9a-6f87d9fa50f4.png",
+  "https://i.postimg.cc/m2npqS94/7eb7793e-7e08-4ba2-a127-1a6f2512e069.png",
+  "https://i.postimg.cc/bwz9NCt4/878c9f06-a414-49f1-bdd3-b7ff83b263a9.png",
+  "https://i.postimg.cc/kM0j9vsj/89b2f355-de0c-454a-88f1-f05755cdde5b.png",
+  "https://i.postimg.cc/QCJK2D0H/905784b4-06bd-4aed-8f65-f409a247fe93.png",
+  "https://i.postimg.cc/MGp5tPZV/91addd38-e79c-4e65-aafb-f52a05ca632f.png",
+  "https://i.postimg.cc/prRpY7xG/92728420-e48e-4195-b79f-6a7d7ce07d49.png",
+  "https://i.postimg.cc/KYpNWP4W/95b02ae0-df01-4151-aa40-419997254dd8.png",
+  "https://i.postimg.cc/7h6XtCYb/9b330cce-fc5b-4cd6-80f9-478944a00f01.png",
+  "https://i.postimg.cc/tCnN1Gsm/9d826521-cca0-443b-bd74-7ff451a94d5a.png",
+  "https://i.postimg.cc/mkjhdwgx/a7eb726d-c505-4d5f-9363-41fb173876aa.png",
+  "https://i.postimg.cc/hvshCrtq/b357fe1b-65dd-4124-98d6-acb758a867ae.png",
+  "https://i.postimg.cc/1XB4WH34/b6249b75-aa6b-487e-b840-bcea88dfd8c4.png",
+  "https://i.postimg.cc/CMsZLFsY/bbee6f39-d1bb-4647-8f19-b7c82876b942.png",
+  "https://i.postimg.cc/15R88LvG/bce3e81a-c5a2-4dd2-ac32-2139da11f087.png",
+  "https://i.postimg.cc/x1cqRLDk/c3288657-fd9c-4e5c-81d6-840648e08be8.png",
+  "https://i.postimg.cc/02tbDc4L/c59d708f-b2d7-4fad-8b76-93dc7abb67fd.png",
+  "https://i.postimg.cc/bNYZZKmS/c6b4aa56-345d-4d20-97b3-fe0a57cf2933.png",
+  "https://i.postimg.cc/wTW7L0rh/c7bf52aa-ce0a-477e-9a58-2c0ea22957b6.png",
+  "https://i.postimg.cc/9QK0NzCw/ccdaf17b-0777-4cde-8ad5-62205147bee9.png",
+  "https://i.postimg.cc/HkRnPjdt/d09dacbe-e933-4361-af93-484d2147e2d7.png",
+  "https://i.postimg.cc/qvSqZg4Q/f583a856-af60-485f-88e6-94bd457700c3.png"
+];
+
+const galleryEmpty1 = document.getElementById("galleryEmpty1");
+
+imagesEmpty1.forEach((src,i)=>{
+  const img = document.createElement("img");
+  img.src = src;
+  img.onclick = () => openModal(i, imagesEmpty1);
+  galleryEmpty1.appendChild(img);
+});
+
+const imagesEmpty2 = [
+  "https://i.postimg.cc/HxBCRPXw/04e241f4-56a9-4a65-9f3c-56fab492a84e.png",
+  "https://i.postimg.cc/PxfgWz9Z/075ccf2e-c13f-4309-a57d-7ad7ffef13f5.png",
+  "https://i.postimg.cc/FRf2CsF0/1330378d-8c68-44de-9272-925ac8b5f817.png",
+  "https://i.postimg.cc/zXL127vZ/13c93c5a-04b0-4afb-acd4-6ef560e881b4.png",
+  "https://i.postimg.cc/RFbDcrcq/1522c215-563b-4b9a-a1e1-0bbf717aa641.png",
+  "https://i.postimg.cc/hvTNgydJ/15786e13-8f4b-4d43-a651-ae80ddaf85a2.png",
+  "https://i.postimg.cc/fTXMT5Nh/1809f57a-0276-48ab-85c5-949a7623c6ac.png",
+  "https://i.postimg.cc/d14KpSrm/2d17d446-a0e4-4e6b-b131-c60c35ed1fac.png",
+  "https://i.postimg.cc/hjpq63VW/2d58d0df-4d84-47bf-ba0a-c28bb383cf00.png",
+  "https://i.postimg.cc/k4fdzhKH/2db70365-0368-4064-8796-eaaad7366d90.png",
+  "https://i.postimg.cc/qM9HPKhF/45f45011-8d68-479f-bb1b-9bb599155de8.png",
+  "https://i.postimg.cc/wjQHDv3K/4783cf0d-f75f-428b-a295-35e2197bd4fc.png",
+  "https://i.postimg.cc/sDtCkWGg/52bcf531-e01d-4da2-81e1-b5504b022f05.png",
+  "https://i.postimg.cc/DwL3nz1f/55f9c837-1e58-429a-afee-6da87ae662c0.png",
+  "https://i.postimg.cc/yNTq3rQs/56abd315-d2ea-4d60-be21-838f5f385895.png",
+  "https://i.postimg.cc/q7rVRdLJ/57e97447-1e2e-434d-80d9-63a951e18d08.png",
+  "https://i.postimg.cc/HnnCg4tc/5af1fe46-e459-427b-a81a-dfd8e31ea95f.png",
+  "https://i.postimg.cc/wMMdpckR/5eadf3e7-ab45-4c93-8465-1296cf520e0e.png",
+  "https://i.postimg.cc/YS27RHmx/7593fd68-8a97-465a-882b-2ec614930e3e.png",
+  "https://i.postimg.cc/kMRmfwDj/7738c6f8-3429-4b8a-bd2f-ae3d61b230e1.png",
+  "https://i.postimg.cc/HnXFHZyr/7907abad-0b4c-40c1-ba18-5c74065034b3.png",
+  "https://i.postimg.cc/Fz6XsdPb/7bf0c436-6848-4a7c-9bc3-1eef53a386c4.png",
+  "https://i.postimg.cc/8kXSb91b/7e439337-7949-45f6-935a-a9a7e782c202.png",
+  "https://i.postimg.cc/TwZBzMhZ/80702f08-466e-455d-8783-52fe1cfa5ef0.png",
+  "https://i.postimg.cc/0jbh358S/816c8bfe-784b-4a43-9587-25e07934d70b.png",
+  "https://i.postimg.cc/tTRK3tw8/90c9b743-9be5-4515-b510-03524982f2c5.png",
+  "https://i.postimg.cc/d3pgKM3c/932abedc-e41a-473f-b04b-a16bd1469029.png",
+  "https://i.postimg.cc/j2LB9qsX/95ec699d-dc10-48ca-bdf8-9e1b14eb1bd8.png",
+  "https://i.postimg.cc/7ZvjsyjZ/972eec0e-45d7-411a-b0c4-8ff5371bdaf7.png",
+  "https://i.postimg.cc/wM8bWXbb/a3661756-210e-4dc8-bd40-948ad5ece0d1.png",
+  "https://i.postimg.cc/qRC5XbQ8/a4656a35-5a3f-462f-92b0-c576b56dba3c.png",
+  "https://i.postimg.cc/Sszv7TVf/a6e11c69-55ec-473a-ae0f-2bdd8a516268.png",
+  "https://i.postimg.cc/3N5bLXb2/b083e6c6-50c4-428b-9b5f-375755152adc.png",
+  "https://i.postimg.cc/GhbXHm04/bd97a4f7-d1bb-44bc-9e26-656694261d3b.png",
+  "https://i.postimg.cc/KYC9z7Fz/c4040b04-c34c-4ff4-abd5-5ba190275dd4.png",
+  "https://i.postimg.cc/15yvf3xD/c652b563-c759-4e6b-ad05-160656465d56.png",
+  "https://i.postimg.cc/029VbygC/ce2c21ca-a2f8-40d2-bee8-5acd28919ff8.png",
+  "https://i.postimg.cc/50c31xqV/d5459665-240d-4886-80f8-764effb9a2f1.png",
+  "https://i.postimg.cc/m2Tmtgx8/d715601e-d593-4780-9ad2-07b27e30f10e.png",
+  "https://i.postimg.cc/9M3pVWt4/db1ab3b1-590a-4f70-9951-b622bb7b7c3c.png",
+  "https://i.postimg.cc/jjnXGWNj/dbb1d9d4-f35c-4bcd-865b-35609096a8fe.png",
+  "https://i.postimg.cc/V6yR1YB5/e06be922-a5e7-4eee-9fda-ad121649e3b9.png",
+  "https://i.postimg.cc/zDFjZYL1/eb840d12-b310-48e5-978d-61b03071dce1.png",
+  "https://i.postimg.cc/BZBg9f89/ecccd7b2-dd74-4a60-aa2a-8b254b79286f.png",
+  "https://i.postimg.cc/PrfMdVZS/f95be0cc-1d90-4c49-9786-ce2d61e624d8.png",
+  "https://i.postimg.cc/J47QRYJ6/ff7bca5e-7941-4973-a9fe-f2494d2c4242.png"
+];
+
+const galleryEmpty2 = document.getElementById("galleryEmpty2");
+
+imagesEmpty2.forEach((src,i)=>{
+  const img = document.createElement("img");
+  img.src = src;
+  img.onclick = () => openModal(i, imagesEmpty2);
+  galleryEmpty2.appendChild(img);
+});
+
+
+let currentImages2 = [];
+
+function openModal(i, arr){
+  current = i;
+  currentImages = arr;
+  modal.style.display = "flex";
+  modalImg.src = currentImages[current];
+}
+
+function change(dir){
+  current += dir;
+  if(current < 0) current = currentImages.length - 1;
+  if(current >= currentImages.length) current = 0;
+  modalImg.src = currentImages[current];
+}
+
+function closeModal(){ modal.style.display="none"; }
+
+function change(dir){
+  current+=dir;
+  if(current<0) current=currentImages.length-1;
+  if(current>=currentImages.length) current=0;
+  modalImg.src=currentImages[current];
+}
+
+function toggleMenu(){
+  sidebar.style.left=(sidebar.style.left==="0px")?"-250px":"0px";
+}
+
+function goPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  sidebar.style.left="-250px";
+  title.innerText=id==="home"?"หน้าหลัก":"อัลบั้ม";
+}
+
+function openAlbum(id,name){
+  goPage(id);
+
+  // เพิ่ม shortcut
+  if(!document.getElementById("link-"+id)){
+    const a=document.createElement("a");
+    a.id="link-"+id;
+    a.innerText=name;
+    a.onclick=()=>goPage(id);
+    shortcuts.appendChild(a);
+  }
+}
+
+// 🔥 ลากเลื่อน
+document.querySelectorAll('.album-row').forEach(row=>{
+  let isDown=false,startX,scrollLeft;
+
+  row.addEventListener('mousedown',e=>{
+    isDown=true;
+    startX=e.pageX-row.offsetLeft;
+    scrollLeft=row.scrollLeft;
+  });
+
+  row.addEventListener('mouseup',()=>isDown=false);
+  row.addEventListener('mouseleave',()=>isDown=false);
+
+  row.addEventListener('mousemove',e=>{
+    if(!isDown) return;
+    e.preventDefault();
+    const x=e.pageX-row.offsetLeft;
+    row.scrollLeft=scrollLeft-(x-startX)*2;
+  });
+});
+
+function preloadImages(arr) {
+  arr.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+}
+
+preloadImages(images1);
+preloadImages(images2);
+preloadImages(images3);
+preloadImages(imagesEmpty1);
+preloadImages(imagesEmpty2);
+</script>
+
+
+</body>
+</html>
