@@ -261,9 +261,9 @@ header {
         <p>ไฟ</p>
       </div>
 
-      <div class="album-card" onclick="openAlbum('album4','ว่าง')">
-        <img src="https://via.placeholder.com/300x200">
-        <p>อัลบั้มว่าง</p>
+      <div class="album-card" onclick="openAlbum('album4','เฉิน')">
+        <img src="https://i.postimg.cc/g2kf8PRM/274eb677-0bd3-4f5d-8e93-ec0a5c1507d1.png">
+        <p>เฉิน</p>
       </div>
 
 
@@ -309,7 +309,9 @@ header {
   <div class="gallery" id="gallery3"></div>
 </div>
 
-<div id="album4" class="page"><h2 style="padding:20px;">ไม่มีรูป</h2></div>
+<div id="album4" class="page">
+  <div class="gallery" id="gallery4"></div>
+</div>
 
 <!-- EMPTY -->
 <div id="empty1" class="page">
@@ -493,6 +495,66 @@ images3.forEach((src,i)=>{
   img.src=src;
   img.onclick=()=>openModal(i, images3);
   gallery3.appendChild(img);
+});
+
+const images4 = [
+  "https://i.postimg.cc/Qd4vqnJr/003353aa-8976-4127-86ac-81840d459be0.png",
+  "https://i.postimg.cc/4xLj1FQN/023417e6-fb6d-4bc2-bafd-29bf3bbdc119.png",
+  "https://i.postimg.cc/K8qC5sDR/029367c9-5f7e-4366-a213-1dee6244051d.png",
+  "https://i.postimg.cc/9FV3X9Qx/02ba648e-f65d-46ae-bd3c-2f1be703902d.png",
+  "https://i.postimg.cc/Nfx3K0yv/05e08c48-31c7-421f-8029-08e3b8be4abe.png",
+  "https://i.postimg.cc/DzSHpdxJ/11907388-fa15-4cc8-9987-33db92c3962c.png",
+  "https://i.postimg.cc/XY7Td0F9/15c15bb4-8454-49bf-bb25-ec99919b0636.png",
+  "https://i.postimg.cc/527DmkSH/191923d1-9048-4eda-b07e-fbd9f22b9b68.png",
+  "https://i.postimg.cc/gkd9ch2K/1b6dd3c4-bbcc-40de-a636-636a1e181761.png",
+  "https://i.postimg.cc/2ScgxXFg/2591bf6c-730b-4762-8d10-454f85949040.png",
+  "https://i.postimg.cc/g2kf8PRM/274eb677-0bd3-4f5d-8e93-ec0a5c1507d1.png",
+  "https://i.postimg.cc/WbjRpZ18/2bcb0d61-cd97-4d43-8f33-d0fedd2d444c.png",
+  "https://i.postimg.cc/FsmtFSHZ/2ec7195e-ccb4-4298-8ba4-5f718a649684.png",
+  "https://i.postimg.cc/zGt4kPFY/3179cf72-871c-40dc-973f-5b62d4786e48.png",
+  "https://i.postimg.cc/Z5K1ph3M/324a34b3-2c0a-4394-8405-e3c9187c547d.png",
+  "https://i.postimg.cc/7YDvPzLY/3d64c7a8-78c1-4664-adc1-7fedb4a52d6a.png",
+  "https://i.postimg.cc/dtvMQC0V/3fa6c03a-58ae-4f0b-a3cf-5b547f427a4b.png",
+  "https://i.postimg.cc/rpD3ZCfW/40128444-29e2-4763-ba71-c81d477bf3c8.png",
+  "https://i.postimg.cc/MpKhV8R7/43bd1e5c-3341-4876-a452-2fc805345b9e.png",
+  "https://i.postimg.cc/wjTSLdJn/453b3cf9-ce3f-4f97-ba43-df07c57f8e17.png",
+  "https://i.postimg.cc/J4QfshyW/4f0a2205-bf6e-4262-9793-9da13887cad5.png",
+  "https://i.postimg.cc/CKRXrHcK/509771f7-5367-45f3-9338-e3bb91858bb5.png",
+  "https://i.postimg.cc/MpKhV8R5/52b88463-ce6c-494c-83c9-b673002d7dac.png",
+  "https://i.postimg.cc/dt9bh07J/5dc37af9-9dcb-43bd-9e5c-3cbf8756d688.png",
+  "https://i.postimg.cc/g2kf8P8F/649b7715-1b3b-4fb4-9f08-bb0163a0c7c2.png",
+  "https://i.postimg.cc/wTkC1Bty/7c255388-6e89-4d0a-be07-78c213e3b56b.png",
+  "https://i.postimg.cc/13CbKYrS/8211f3d6-1867-448c-bc10-c0f7bda4e43d.png",
+  "https://i.postimg.cc/dt9bh072/8b290ef4-df5a-4ef7-9c85-239f0ffa4d65.png",
+  "https://i.postimg.cc/15Kk8zg0/8fa6a93f-7638-4a75-b37a-db5f87fe5502.png",
+  "https://i.postimg.cc/MpPgYrbs/911f198e-c75c-46a2-a808-aeccce493b80.png",
+  "https://i.postimg.cc/DwytLKs4/9c3b2fcd-88d2-4378-ac31-bdabbf808a25.png",
+  "https://i.postimg.cc/yNDtpXLT/aa9b0ce0-f75c-46eb-b967-ce66a4d7b1b0.png",
+  "https://i.postimg.cc/7L5dtMKm/af309e10-bdc9-402b-95d3-bf9f6e70c3e1.png",
+  "https://i.postimg.cc/yN25MgGc/b7aa976a-bb0c-4456-9eb3-e845a735d91a.png",
+  "https://i.postimg.cc/MGg4CML5/c635d376-8be2-49c2-98a5-9a467beb419a.png",
+  "https://i.postimg.cc/KYCV6kWq/c9204aa3-dc6a-4acb-ad43-c96d4fb1cfc3.png",
+  "https://i.postimg.cc/Ss85kQFq/ca13913d-a722-46ee-9f2e-c3cee53eda64.png",
+  "https://i.postimg.cc/Hx5KdWDg/cd03edea-202d-4f90-a0fe-04c9c33f1f5f.png",
+  "https://i.postimg.cc/G2YNd30Z/d80b6e19-7cbf-4699-a040-24261bd8228e.png",
+  "https://i.postimg.cc/Y9gVM2K4/df191a13-c276-4f0e-8ce6-2f1943483e07.png",
+  "https://i.postimg.cc/prHSTNRd/e52a85b3-d7bd-470f-a8c7-25eb7ed9f6d0.png",
+  "https://i.postimg.cc/7hkR6vwf/eae74e56-51f0-4a65-9391-19daa0b08f5c.png",
+  "https://i.postimg.cc/NFcnMhB9/eb85d6c4-9154-4632-aabc-29510f269458.png",
+  "https://i.postimg.cc/8cSY58Nh/f2a33b6d-076f-40a6-8cff-0e2bc844d3ae.png",
+  "https://i.postimg.cc/kGmH4rqh/f392ceeb-9bf8-424d-a800-5bd222b9993a.png",
+  "https://i.postimg.cc/rskHm6MC/f62bfc54-32bb-4202-982d-b83f2897865d.png",
+  "https://i.postimg.cc/0js4QgPn/f85f433b-92a3-4d55-be54-4d52e722ff7c.png",
+  "https://i.postimg.cc/90YnwxQb/febacd77-8cf8-4525-abc3-cfa95c6f32a8.png",
+];
+
+const gallery4 = document.getElementById("gallery4");
+
+images4.forEach((src,i)=>{
+  const img=document.createElement("img");
+  img.src=src;
+  img.onclick=()=>openModal(i, images4);
+  gallery4.appendChild(img);
 });
 
 const imagesEmpty1 = [
@@ -692,6 +754,7 @@ function preloadImages(arr) {
 preloadImages(images1);
 preloadImages(images2);
 preloadImages(images3);
+preloadImages(images4);
 preloadImages(imagesEmpty1);
 preloadImages(imagesEmpty2);
 </script>
